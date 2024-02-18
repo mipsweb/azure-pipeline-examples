@@ -1,7 +1,6 @@
 # ASP.NET Core (.NET Framework)
-# Build and test ASP.NET Core projects targeting the full .NET Framework.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# Example of Build and Publish ASP.NET Core App to remote Web Hosting server using Web Deploy
+# Web Hosting service must be configured to support Web Deploy
 
 trigger:
 - master
