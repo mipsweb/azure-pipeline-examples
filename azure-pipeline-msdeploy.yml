@@ -1,0 +1,41 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: windows-latest
+
+variables:
+  - group: Deployment
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: restore
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  enabled: false
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '-c Release --self-contained -r win-x86 -f net8.0 -o $(build.artifactstagingdirectory)'
+    zipAfterPublish: false
+
+- task: CmdLine@2
+  displayName: 'Web Deploy'
+  inputs:
+    script: 'msdeploy.exe -verb:sync -source:contentPath="$(build.artifactstagingdirectory)\$(SolutionName)" -dest:contentPath="$(DestContentPath)",computerName="$(ComputerName)",userName="$(Username)",password="$(Password)",authtype="Basic",includeAcls="False" -allowUntrusted -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension -enableRule:DoNotDeleteRule -enableRule:AppOffline'
+    workingDirectory: 'c:\Program Files (x86)\IIS\Microsoft Web Deploy V3\'
