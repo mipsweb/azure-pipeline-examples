@@ -1,5 +1,5 @@
 # ASP.NET Core (.NET Framework)
-# Example of Build and Publish ASP.NET Core App to remote Web Hosting server using Web Deploy
+# Example of Build and Publish self-contained ASP.NET Core App to remote Web Hosting server using Web Deploy
 # Web Hosting service must be configured to support Web Deploy
 
 trigger:
